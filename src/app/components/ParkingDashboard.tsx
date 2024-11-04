@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Activity, Car, MapPin, Navigation, X } from 'lucide-react';
+import { Activity, Car, MapPin, X } from 'lucide-react';
 
 interface Location {
   lat: number;
