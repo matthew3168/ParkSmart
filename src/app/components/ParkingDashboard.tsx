@@ -32,7 +32,7 @@ interface ParkingData {
   lastUpdated: string;
 }
 
-const API_URL = 'https://zd2g9mb80m.execute-api.us-east-1.amazonaws.com/default/ParkSmart_GET_East'; // Replace with your actual API Gateway URL
+const API_URL = '/api/parking'; // Replace with your actual API Gateway URL
 
 const ParkingDashboard: React.FC = () => {
   const [selectedArea, setSelectedArea] = useState<number | null>(null);
@@ -61,8 +61,21 @@ const ParkingDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchParkingData();
-    const interval = setInterval(fetchParkingData, 5000); // Poll every 5 seconds
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/parking');
+        const data = await response.json();
+        setParkingData(data);
+      } catch (error) {
+        console.error('Error fetching parking data:', error);
+      }
+    };
+
+    // Initial fetch
+    fetchData();
+
+    // Set up polling interval
+    const interval = setInterval(fetchParkingData, 3000); // Poll every 3 seconds
     return () => clearInterval(interval);
   }, []);
 
