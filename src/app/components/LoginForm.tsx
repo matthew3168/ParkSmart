@@ -18,9 +18,9 @@ const LoginForm = () => {
     setError('');
     
     try {
-      const result = await signIn(username, password);
-      console.log('Login successful:', result);
-      router.push('/');
+      await signIn(username, password);
+      console.log('Login successful, redirecting to dashboard');
+      router.push('/dashboard');  // Changed from '/' to '/dashboard'
     } catch (err: any) {
       console.error('Login error:', err);
       setError(err.message || 'Failed to sign in');
@@ -28,6 +28,7 @@ const LoginForm = () => {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

@@ -1,10 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import LoginForm from '../components/LoginForm';
+import RegisterForm from '../components/RegisterForm';
 import { ArrowLeft } from 'lucide-react';
 
-const LoginPage = () => {
+export default function RegisterPage() {
   const router = useRouter();
 
   return (
@@ -19,10 +19,8 @@ const LoginPage = () => {
         </button>
       </div>
       <div className="flex flex-col items-center pt-8">
-        <LoginForm />
+        <RegisterForm />
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}

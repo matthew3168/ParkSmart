@@ -27,6 +27,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const isAuth = await auth.isAuthenticated();
       console.log('Auth status checked:', isAuth);
       setIsAuthenticated(isAuth);
+
+      // If on login page and authenticated, redirect to dashboard
+      if (isAuth && window.location.pathname === '/login') {
+        router.push('/dashboard');
+      }
+      // If not authenticated and on dashboard, redirect to login
+      else if (!isAuth && window.location.pathname === '/dashboard') {
+        router.push('/');
+      }
     } catch (error) {
       console.error('Auth check failed:', error);
       setIsAuthenticated(false);
@@ -39,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const result = await auth.signIn(username, password);
       setIsAuthenticated(true);
-      router.push('/');
+      router.push('/dashboard');
       return result;
     } catch (error) {
       console.error('Sign in failed:', error);
