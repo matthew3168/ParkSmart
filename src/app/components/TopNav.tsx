@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { LogOut } from 'lucide-react';
-import { constructLogoutUrl } from '@/lib/logoutHelper';
+
 
 const TopNav = () => {
     const handleLogout = () => {
@@ -16,7 +16,7 @@ const TopNav = () => {
       });
   
       // Redirect to Cognito's logout endpoint
-      window.location.href = constructLogoutUrl();
+      window.location.href = "/"
     };
   
     return (
