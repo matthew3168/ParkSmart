@@ -16,11 +16,17 @@ const getParkingData = async (tableName: string) => {
 
 const calculateAreaStats = (lots: any[]) => {
   const totalSpots = lots.length;
-  const availableSpots = lots.reduce(
-    (count, lot) => (lot.status.S === "False" ? count + 1 : count),
-    0
-  );
-  return { totalSpots, availableSpots };
+  const availableLots: string[] = [];
+  
+  lots.forEach(lot => {
+    if (lot.status.S === "True") {
+      availableLots.push(lot.lot_id.S);
+    }
+  });
+
+  const availableSpots = availableLots.length;
+
+  return { totalSpots, availableSpots, availableLots };
 };
 
 const areaMappings = {
@@ -80,6 +86,7 @@ export async function GET() {
           name: areaName,
           totalSpots: stats.totalSpots,
           availableSpots: stats.availableSpots,
+          availableLots: stats.availableLots,
           status: "active",
           location: locationMappings[areaName],
           infoPosition: positionMappings[areaName].infoPosition,

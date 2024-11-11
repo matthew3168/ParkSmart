@@ -167,6 +167,8 @@ export const auth = {
       throw new Error(error.message || 'Failed to authenticate');
     }
   },
+  
+  
 
   refreshSession: async (): Promise<boolean> => {
     try {
@@ -266,5 +268,57 @@ export const auth = {
     localStorage.removeItem('cognito-access-token');
     localStorage.removeItem('cognito-refresh-token');
     localStorage.removeItem('cognito-username');
-  }
-};
+  },
+  
+decodeToken: (token: string): any => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  },
+
+  isAdmin: async (): Promise<boolean> => {
+    try {
+      const token = localStorage.getItem('cognito-token');
+      if (!token) return false;
+
+      const decodedToken = auth.decodeToken(token);
+      console.log('Decoded token:', decodedToken); // Debug log
+
+      // Check 'cognito:groups' claim in the token
+      const groups = decodedToken['cognito:groups'] || [];
+      console.log('User groups:', groups); // Debug log
+
+      return groups.includes('Administrators');
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      return false;
+    }
+  },
+
+  adminSignIn: async (username: string, password: string): Promise<any> => {
+    try {
+      // First perform normal sign in
+      const result = await auth.signIn(username, password);
+      
+      // Check admin status using the token
+      const isAdminUser = await auth.isAdmin();
+      
+      if (!isAdminUser) {
+        auth.signOut();
+        throw new Error('Unauthorized: Admin access required');
+      }
+      
+      return result;
+    } catch (error: any) {
+      console.error('Admin sign in error:', error);
+      throw error;
+    }
+  }};

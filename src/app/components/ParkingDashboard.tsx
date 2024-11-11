@@ -8,7 +8,6 @@ import TopNav from './TopNav';
 interface Location {
   lat: number;
   lng: number;
-  address: string;
 }
 
 interface ParkingArea {
@@ -16,6 +15,7 @@ interface ParkingArea {
   name: string;
   totalSpots: number;
   availableSpots: number;
+  availableLots: string[];
   status: 'active' | 'maintenance';
   location: Location;
   infoPosition: {
@@ -33,7 +33,7 @@ interface ParkingData {
   lastUpdated: string;
 }
 
-const API_URL = '/api/parking'; // Replace with your actual API Gateway URL
+const API_URL = '/api/parking';
 
 const ParkingDashboard: React.FC = () => {
   const [selectedArea, setSelectedArea] = useState<number | null>(null);
@@ -62,29 +62,16 @@ const ParkingDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/parking');
-        const data = await response.json();
-        setParkingData(data);
-      } catch (error) {
-        console.error('Error fetching parking data:', error);
-      }
-    };
-
-    // Initial fetch
-    fetchData();
-
-    // Set up polling interval
-    const interval = setInterval(fetchParkingData, 3000); // Poll every 3 seconds
+    fetchParkingData();
+    const interval = setInterval(fetchParkingData, 3000);
     return () => clearInterval(interval);
   }, []);
 
   const getOccupancyColor = (available: number, total: number): string => {
     const percentage = (available / total) * 100;
-    if (percentage > 50) return '#22c55e'; // green
-    if (percentage > 10) return '#eab308'; // yellow
-    return '#ef4444'; // red
+    if (percentage > 50) return '#22c55e';
+    if (percentage > 10) return '#eab308';
+    return '#ef4444';
   };
 
   const getOccupancyColorClass = (available: number, total: number): string => {
@@ -127,7 +114,6 @@ const ParkingDashboard: React.FC = () => {
     );
   }
 
-  // Filter areas based on selection
   const displayedAreas = selectedArea
     ? parkingData.areas.filter(area => area.id === selectedArea)
     : parkingData.areas;
@@ -138,7 +124,7 @@ const ParkingDashboard: React.FC = () => {
       <main className="pt-16">
         <div className="p-6 max-w-6xl mx-auto">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold mb-2">ParkSmart</h1>
+            <h1 className="text-3xl font-bold mb-2">TP Parking Management System</h1>
             <p className="text-gray-600">
               Last updated: {new Date(parkingData.lastUpdated).toLocaleString()}
             </p>
@@ -314,10 +300,10 @@ const ParkingDashboard: React.FC = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {displayedAreas.map((area) => (
-                <Card key={area.id}>
+                <Card key={area.id} className="overflow-hidden">
                   <CardHeader>
                     <CardTitle className="flex justify-between items-center">
-                      {area.name}
+                      <span>{area.name}</span>
                       <span
                         className={`px-2 py-1 rounded-full text-xs ${
                           area.status === 'active'
@@ -348,6 +334,21 @@ const ParkingDashboard: React.FC = () => {
                           style={{ width: `${(area.availableSpots / area.totalSpots) * 100}%` }}
                         />
                       </div>
+                      {area.availableLots && area.availableLots.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-semibold mb-2">Available Lots</h4>
+                          <div className="flex flex-wrap gap-1">
+                            {area.availableLots.sort().map((lot) => (
+                              <span
+                                key={lot}
+                                className="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded"
+                              >
+                                {lot}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
