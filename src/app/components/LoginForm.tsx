@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from './AuthProvider';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -34,8 +35,15 @@ const LoginForm = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
+          <Image 
+            src="/images/ParkSmartLogo.jpg"  // Note: no need for ../public
+            width={800}
+            height={450}
+            alt="ParkSmart Logo"
+            priority  // If this is an important above-the-fold image
+          />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
+            Sign in
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

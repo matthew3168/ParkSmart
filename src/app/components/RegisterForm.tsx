@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/auth';
+import Image from 'next/image';
 
 const RegisterForm = () => {
   const [username, setUsername] = useState('');
@@ -57,6 +58,13 @@ const RegisterForm = () => {
 
   return (
     <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+      <Image 
+            src="/images/ParkSmartLogo.jpg"  // Note: no need for ../public
+            width={800}
+            height={450}
+            alt="ParkSmart Logo"
+            priority  // If this is an important above-the-fold image
+          />
       <h2 className="text-2xl font-bold text-center mb-8">Create an Account</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (

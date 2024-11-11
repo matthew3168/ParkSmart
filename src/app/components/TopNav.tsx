@@ -16,7 +16,7 @@ const TopNav = () => {
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
                 <span className="text-xl font-bold text-gray-900">
-                  TP Parking Management
+                  ParkSmart
                 </span>
               </div>
             </div>

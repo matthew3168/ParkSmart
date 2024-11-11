@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { Building } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -10,7 +11,13 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
         <div className="text-center">
-          <Building className="mx-auto h-12 w-12 text-blue-500" />
+          <Image 
+            src="/images/ParkSmartLogo.jpg"  // Note: no need for ../public
+            width={800}
+            height={450}
+            alt="ParkSmart Logo"
+            priority  // If this is an important above-the-fold image
+          />
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
             TP Parking Dashboard
           </h2>
