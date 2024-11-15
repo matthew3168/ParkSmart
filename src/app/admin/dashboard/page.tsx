@@ -149,7 +149,7 @@ export default function AdminDashboard() {
 
           <div className="bg-white rounded-lg shadow p-4">
             <iframe
-              src="http://localhost:5601/app/dashboards#/view/05cb4576-a036-4a75-9643-1007cd1ae1fa?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-15m,to:now))"
+              src="/api/kibana"
               className="w-full h-[600px] border-0"
               title="Kibana Dashboard"
             />
