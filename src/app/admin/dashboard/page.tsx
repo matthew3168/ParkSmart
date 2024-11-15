@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import AdminProtected from '@/app/components/AdminProtected';
-import { Car, Users, MapPin, Clock, LogOut } from 'lucide-react';
+import { Car, MapPin, LogOut } from 'lucide-react';
 import { useAuth } from '@/app/components/AuthProvider';
 import { useRouter } from 'next/navigation';
 
@@ -147,37 +147,12 @@ export default function AdminDashboard() {
             ))}
           </div>
 
-          <div className="bg-white rounded-lg shadow">
-            <div className="p-4 border-b">
-              <h2 className="text-xl font-semibold">Quick Actions</h2>
-            </div>
-            <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-              {/* Quick actions remain the same */}
-              <button className="p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                <div className="flex flex-col items-center">
-                  <Car className="text-blue-600 mb-2" size={24} />
-                  <span className="text-sm font-medium">Update Spots</span>
-                </div>
-              </button>
-              <button className="p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                <div className="flex flex-col items-center">
-                  <Users className="text-green-600 mb-2" size={24} />
-                  <span className="text-sm font-medium">Manage Users</span>
-                </div>
-              </button>
-              <button className="p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
-                <div className="flex flex-col items-center">
-                  <MapPin className="text-purple-600 mb-2" size={24} />
-                  <span className="text-sm font-medium">View Map</span>
-                </div>
-              </button>
-              <button className="p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors">
-                <div className="flex flex-col items-center">
-                  <Clock className="text-orange-600 mb-2" size={24} />
-                  <span className="text-sm font-medium">View History</span>
-                </div>
-              </button>
-            </div>
+          <div className="bg-white rounded-lg shadow p-4">
+            <iframe
+              src="http://localhost:5601/app/dashboards#/view/05cb4576-a036-4a75-9643-1007cd1ae1fa?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-15m,to:now))"
+              className="w-full h-[600px] border-0"
+              title="Kibana Dashboard"
+            />
           </div>
         </div>
       </div>
