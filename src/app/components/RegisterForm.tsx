@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 const RegisterForm = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,21 +15,24 @@ const RegisterForm = () => {
   const router = useRouter();
 
   const validatePassword = (password: string): boolean => {
-    // Cognito default password policy:
-    // - Minimum length of 8 characters
-    // - At least 1 uppercase letter
-    // - At least 1 lowercase letter
-    // - At least 1 number
-    // - At least 1 special character
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
+  };
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    // Validation
+    if (!validateEmail(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -43,11 +47,11 @@ const RegisterForm = () => {
 
     try {
       console.log('Attempting to register user:', username);
-      const result = await auth.signUp(username, password);
+      const result = await auth.signUp(username, password, email);
       console.log('Registration successful:', result);
       
-      // Show success message or directly sign in
-      router.push('/login?registered=true');
+      // Redirect to confirm page with username and email
+      router.push(`/confirm?username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}`);
     } catch (err: any) {
       console.error('Registration error:', err);
       setError(err.message || 'Failed to register. Please try again.');
@@ -59,11 +63,11 @@ const RegisterForm = () => {
   return (
     <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
       <Image 
-            src="/images/ParkSmartLogo.jpg"  // Note: no need for ../public
+            src="/images/ParkSmartLogo.jpg"
             width={800}
             height={450}
             alt="ParkSmart Logo"
-            priority  // If this is an important above-the-fold image
+            priority
           />
       <h2 className="text-2xl font-bold text-center mb-8">Create an Account</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -84,6 +88,21 @@ const RegisterForm = () => {
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            disabled={isLoading}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            required
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             disabled={isLoading}
           />
         </div>

@@ -1,9 +1,9 @@
 import crypto from 'crypto';
 
-const CLIENT_ID = '7rd8b4akmjtonbjuh7a2dag4pm';
-const CLIENT_SECRET = 'r58b9nrjlfmd9nnmmvu7pujkongrg1blr31msdkvv07ljv6u37s';
+const CLIENT_ID = '36rvfehpaasebugneghn6qhmko';
+const CLIENT_SECRET = 'vm4fi3970j2vihi2if8a9l05reufg1tl5p82ougc7ge25p8lt1o';
 const COGNITO_URL = 'https://cognito-idp.us-east-1.amazonaws.com/';
-const USER_POOL_ID = 'us-east-1_odL45tRcG';
+const USER_POOL_ID = 'us-east-1_fHl7actWa';
 
 const generateSecretHash = (username: string): string => {
   const message = username + CLIENT_ID;
@@ -14,14 +14,20 @@ const generateSecretHash = (username: string): string => {
 };
 
 export const auth = {
-  signUp: async (username: string, password: string): Promise<any> => {
+  signUp: async (username: string, password: string, email: string): Promise<any> => {
     try {
       const secretHash = generateSecretHash(username);
       const signUpData = {
         ClientId: CLIENT_ID,
         Username: username,
         Password: password,
-        SecretHash: secretHash
+        SecretHash: secretHash,
+        UserAttributes: [
+          {
+            Name: 'email',
+            Value: email
+          }
+        ]
       };
 
       console.log('Attempting to sign up user:', username);
@@ -160,15 +166,12 @@ export const auth = {
       }
     } catch (error: any) {
       console.error('Sign in error:', error);
-      // Handle specific error cases
       if (error.message.includes('UserNotConfirmedException')) {
         throw new Error('Please confirm your registration before signing in.');
       }
       throw new Error(error.message || 'Failed to authenticate');
     }
   },
-  
-  
 
   refreshSession: async (): Promise<boolean> => {
     try {
@@ -270,7 +273,7 @@ export const auth = {
     localStorage.removeItem('cognito-username');
   },
   
-decodeToken: (token: string): any => {
+  decodeToken: (token: string): any => {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -321,4 +324,5 @@ decodeToken: (token: string): any => {
       console.error('Admin sign in error:', error);
       throw error;
     }
-  }};
+  }
+};
