@@ -5,6 +5,7 @@ import AdminProtected from '@/app/components/AdminProtected';
 import { Car, MapPin, LogOut } from 'lucide-react';
 import { useAuth } from '@/app/components/AuthProvider';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image'
 
 interface Area {
   name: string;
@@ -70,8 +71,17 @@ export default function AdminDashboard() {
       <div className="min-h-screen bg-gray-100">
         <nav className="bg-blue-600 p-4">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 className="text-white text-2xl font-bold">ParkSmart Admin</h1>
-            <div className="text-white text-sm">
+	    <div className="flex items-center gap-3">
+	     <Image 
+              src="/images/ParkSmartLogo.jpg" 
+              alt="ParkSmart Logo"
+              width={45}
+              height={45}
+              className="rounded-full"
+            />
+	    <h1 className="text-white text-2xl font-bold">ParkSmart Admin</h1>
+            </div>
+	    <div className="text-white text-sm">
               Last updated: {new Date(data?.lastUpdated || '').toLocaleString()}
             </div>
             <button 
@@ -149,7 +159,7 @@ export default function AdminDashboard() {
 
           <div className="bg-white rounded-lg shadow p-4">
             <iframe
-              src="/api/kibana"
+              src="https://parksmart-alb-1934178389.us-east-1.elb.amazonaws.com:5601/app/dashboards#/view/05cb4576-a036-4a75-9643-1007cd1ae1fa?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-15y,to:now))"
               className="w-full h-[600px] border-0"
               title="Kibana Dashboard"
             />
